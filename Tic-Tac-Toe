@@ -1,5 +1,4 @@
 
-
 board = ["-", "-", "-",
          "-", "-", "-",
          "-", "-", "-"]
@@ -19,10 +18,11 @@ def play_game():
 
 
   display_board()
-
- 
+  
+  check_lines()
+  
   while game_running:
-
+ 
    
     change_turns(current_player)
 
@@ -34,9 +34,11 @@ def play_game():
   
   
   if winner == "X" or winner == "O":
-    print(winner + "You won!")
+    print(winner + "You won!") 
   elif winner == None:
-    print("Cat! No winners, try again.")
+      print ("Game over! Good job people!")
+  
+  
 
 
 def display_board():
@@ -57,8 +59,6 @@ def change_turns(player):
 
     while position not in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
       position = input("Choose a position from 1-9: ")
- 
-
     position = int(position) - 1
 
     if board[position] == "-":
@@ -73,17 +73,50 @@ def change_turns(player):
 def check_if_game_over():
   check_for_winner()
   check_for_tie()
+  if winner == "X" or winner == "O":
+    print(winner + "You win")
+  elif winner == None:
+      return False
+ 
+    
+
+
+
+
+    
+def check_lines():
+    global game_running
+    line_1 = board[0] == board[1] == board[2] != "-"
+    line_2 = board[3] == board[4] == board[5] != "-"
+    line_3 = board[6] == board[7] == board[8] != "-"
+    line_4 = board[0] == board[3] == board[6] != "-"
+    line_5 = board[1] == board[4] == board[7] != "-"
+    line_6 = board[2] == board[5] == board[8] != "-"
+    line_7 = board[0] == board[4] == board[8] != "-"
+    line_8 = board[2] == board[4] == board[6] != "-"
+    
+    if line_1 or line_2 or line_3 or line_4 or line_5 or line_6 or line_7 or line_8:
+        game_running = False
+    
+    
 
 
 def check_for_winner():
-  return (board[0] == board[1] == board[2] != "-" or
-            board[3] == board[4] == board[5] != "-" or
-            board[6] == board[7] == board[8] != "-" or
-            board[0] == board[3] == board[6] != "-" or
-            board[1] == board[4] == board[7] != "-" or
-            board[2] == board[5] == board[8] != "-" or
-            board[0] == board[4] == board[8] != "-" or
-            board[2] == board[4] == board[6] != "-")
+  global winner
+  check_lines() 
+line_winner = check_lines()
+
+
+if line_winner == "X" or line_winner == "O":
+    print(winner + "You won!")
+elif winner == None:
+    print("")
+if line_winner:
+    winner = line_winner
+    
+else:
+    winner = None
+    
 
 def check_for_tie():
   global game_running
@@ -92,6 +125,7 @@ def check_for_tie():
     return True
   else:
     return False
+
 
 def change_players():
   global current_player
